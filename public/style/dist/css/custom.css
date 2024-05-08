@@ -1,0 +1,71 @@
+
+.navbar-nav .nav-link:hover{
+    background-color: #1A6225 !important ;
+    color: #fff !important;
+    border-radius: 3px;
+    border-top-right-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+}
+[class*=sidebar-dark-] .nav-sidebar>.nav-item>.nav-link:active {
+    color: #fff;
+}
+.nav-pills .nav-link:not(.active):hover {
+    background-color: #09993f;
+    color: #fff !important;
+    border-top-right-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+}
+.nav-item {
+    justify-content: space-between !important; 
+}
+a, .nav-link {
+    background-color: #ffffff;
+}
+.bg-greenn{
+    background-color: #09993f;
+    color: #fff !important;
+}
+.nav-link{
+    color: #000 !important;
+}
+.btn-app1 {
+  border-radius: 3px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  color: #6c757d;
+  font-size: 12px;
+  height: 60px;
+  margin: 0 0 10px 10px;
+  min-width: 80px;
+  padding: 15px 5px;
+  position: relative;
+  text-align: center;
+}
+::-webkit-scrollbar {
+    width: 5px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #fff;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #fff;
+}
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff !important;
+    background-color: #09993f !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important;
+    border-top-right-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+}
+.btn-save {
+    background-color: #09993f !important;
+    border-color: #09993f !important;
+}
+.card-curve {
+    border-radius: 10px; 
+    box-shadow: 0px 5px 24px rgba(0, 0, 0, 0.1) !important;
+}
