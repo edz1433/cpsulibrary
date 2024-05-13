@@ -23,7 +23,7 @@
         </li>
 
         <li class="nav-item mt-1">
-            <a href="" class="nav-link">
+            <a href="{{ route('reportsForm') }}" class="nav-link {{ request()->is('*reports*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-file-lines"></i>
                 <p>
                     Reports

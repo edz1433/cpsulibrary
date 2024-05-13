@@ -8,6 +8,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ReportsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,7 +39,13 @@ use App\Http\Controllers\SettingsController;
             Route::get('/list', [MonitoringController::class,'monitorRead'])->name('monitorRead');
         });
 
-            //Users
+        Route::prefix('/reports')->group(function () {
+            Route::get('/', [ReportsController::class,'reportsForm'])->name('reportsForm');
+            Route::post('/', [ReportsController::class,'reportsForm'])->name('reportsForm');
+            Route::get('/gen', [ReportsController::class,'reportsPdf'])->name('reportsPdf');
+        });
+
+        //Users
         Route::prefix('/users')->group(function () {
             Route::get('/list',[UserController::class,'userRead'])->name('userRead');
             Route::post('/list', [UserController::class, 'userCreate'])->name('userCreate');

@@ -217,8 +217,13 @@
         ],
         datasets: [
             {
-            data: [700,500,400,600],
-            backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef'],
+                data: [
+                    {{ isset($datavisit) ? $datavisit['student']->count() : 0 }},
+                    {{ isset($datavisit) ? $datavisit['faculty']->count() : 0 }},
+                    {{ isset($datavisit) ? $datavisit['staff']->count() : 0 }},
+                    {{ isset($datavisit) ? $datavisit['visitor']->count() : 0 }}
+                ],
+                backgroundColor : ['#17B978', '#5DEBD7', '#9ED2BE', '#D0D4CA'],
             }
         ]
         }

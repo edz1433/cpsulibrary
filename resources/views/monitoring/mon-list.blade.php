@@ -25,7 +25,7 @@
                                 <td>{{ ucfirst($mon->lname) }} {{ ucfirst($mon->s_fname) }} {{ ucfirst($mon->s_mname) }}</td>
                                 <td>{{ $mon->user_type }}</td>
                                 <td>{{ ($mon->time_in != '') ? \Carbon\Carbon::parse($mon->time_in)->format('h:i:s A') : '' }}</td>
-                                <td>{{ ($mon->time_in != '') ? \Carbon\Carbon::parse($mon->time_out)->format('h:i:s A') : '' }}</td>
+                                <td>{{ ($mon->time_out != '') ? \Carbon\Carbon::parse($mon->time_out)->format('h:i:s A') : '' }}</td>
                                 <td>{{ $mon->date }}</td>
                                 <td><span class="badge badge-{{ ($mon->status == 'completed') ? 'success' : 'secondary' }}">{{ $mon->status }}</span></td>
                             </tr>

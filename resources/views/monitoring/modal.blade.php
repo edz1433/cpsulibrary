@@ -1,4 +1,4 @@
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+<div class="modal fade" id="loginModal" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,51 +10,50 @@
             <div class="modal-body">
                 <form action="{{ route('logAttendanceManual') }}" id="log-form" method="GET">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-6" id="user-type-div">
                             <span class="badge badge-secondary text-left" style="width: 70px; display: inline-block;">User Type:</span>
                             <input type="hidden" id="action" name="action">
                             <select type="text" class="form-control form-control-sm" onchange="typeChange(this.value)" style="height: 38px;" name="user_type" id="userType" required>
-                                <option value="">-- Select --</option>
-                                <option value="Students">Student</option>
+                                <option value="Students" selected>Student</option>
                                 <option>Faculty</option>
                                 <option>Staff</option>
                                 <option>Visitor</option>
                             </select>
                         </div>
-                        <div class="col-6 student-faculty">
+                        <div class="col-6" id="user-name-div">
                             <span class="badge badge-secondary text-left" style="">Name:</span>
-                            <select type="select" class="form-control form-control-sm select2bs4" name="visit_id" id="fullName" placeholder="Select Your Name">
+                            <select type="text" onchange="nameTrigger(this.value)" class="form-control form-control-sm select2" data-placeholder="Search Your Name" name="visit_id" id="fullName">
                             </select>
                         </div>
-                        <div class="col-6 visitor-staff office">
-                            <span class="badge badge-secondary text-left" style="width: 70px; display: inline-block;">Office:</span>
-                            <select type="text" class="form-control form-control-sm" style="height: 38px;" name="office" id="userType">
-                                <option value="">-- Select --</option>
+                        <div class="col-4 visitor-staff office">
+                            <span class="badge badge-secondary text-left">Office:</span>
+                            <select type="text" class="form-control form-control-sm select2" data-placeholder="Select Office" id="office" name="office">
+                                <option value="">-- Select Office --</option>
                                 @foreach($offices as $off)
                                     <option value="{{ $off->id }}">{{ $off->office_name }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-6 visitor-staff campus">
-                            <span class="badge badge-secondary text-left" style="width: 70px; display: inline-block;">Campus:</span>
-                            <select type="text" class="form-control form-control-sm" style="height: 38px;" name="campus" id="userType">
-                                <option value="">-- Select --</option>
+                        <div class="col-4 visitor-staff campus">
+                            <span class="badge badge-secondary text-left">Campus:</span>
+                            <select type="text" class="form-control form-control-sm select2" data-placeholder="Select Campus" id="campus" name="campus">
+                                <option value="">-- Select Campus --</option>
                                 @foreach($campus as $camp)
                                     <option value="{{ $camp->id }}">{{ $camp->campus_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-4 visitor-staff">
-                            <span class="badge badge-secondary text-left" style="">First Name:</span>
+                            <span class="badge badge-secondary text-left" style="">Last Name:</span>
                             <input type="text" name="lname" class="form-control capitalize-first">
                         </div>
                         <div class="col-4 visitor-staff">
-                            <span class="badge badge-secondary text-left" style="">Last Name:</span>
-                            <input type="text" name="s_fname" class="form-control capitalize-first">
+                            <span class="badge badge-secondary text-left" style="">First Name:</span>
+                            <input type="text" name="fname" class="form-control capitalize-first">
                         </div>
                         <div class="col-4 visitor-staff">
                             <span class="badge badge-secondary text-left" style="">Middle Name:</span>
-                            <input type="text" name="s_mname" class="form-control capitalize-first">
+                            <input type="text" name="mname" class="form-control capitalize-first">
                         </div>
                         <div class="col-12 text-right mt-2 mb-2">
                             <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-times-circle"></i> Close</button>

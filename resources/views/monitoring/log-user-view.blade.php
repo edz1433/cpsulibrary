@@ -11,17 +11,22 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         <!-- Font Awesome Icons -->
         <link rel="stylesheet" href="{{ asset('style/plugins/fontawesome-free-v6/css/all.min.css') }}">
+        <!-- icheck bootstrap -->
+        <link rel="stylesheet" href="{{ asset('style/plugins/icheck-bootstrap/icheck-bootstrap.css') }}">
         <!-- Theme style -->
         <link rel="stylesheet" href="{{ asset('style/dist/css/adminlte.css') }}">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="{{ asset('style/plugins/select2/css/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+        <!-- DataTable -->
+        <link rel="stylesheet" href="{{ asset('style/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('style/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
         <!-- Toastr -->
         <link rel="stylesheet" href="{{ asset('style/plugins/toastr/toastr.min.css') }}">
         <!-- SweetAlert2 -->
         <link rel="stylesheet" href="{{ asset('style/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-        <!-- Select2 -->
-        <link rel="stylesheet" href="{{ asset('style/plugins/select2/css/select2.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('style/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-        <!-- Bootstrap4 Duallistbox -->
-        <link rel="stylesheet" href="{{ asset('style/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css') }}">
+
         <!-- Logo  -->
         <link rel="shortcut icon" type="" href="{{ asset('style/dist/img/CPSU_L.png') }}">
         
@@ -67,6 +72,7 @@
                 <input type="text" name="bcodeScan" id="barcode-input" placeholder="Scan barcode" autofocus>
                 <button id="submit" type="submit">Submit</button>
             </form>
+            
             @include('monitoring.modal')
             <div class="row justify-content-center align-items-center">
                 <div class="col-md-8 loginpage-left"></div>
@@ -80,11 +86,8 @@
                         <div class="">
                             <p class="login-box-msg" style="color: #358359;">Welcome to <b>CPSU LIBRARY-MS</b></p>
                             <div class="row">
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-block btn-success" onclick="changeAction('in')" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Time In</button>
-                                </div>
-                                <div class="col-6">
-                                    <button type="submit" class="btn btn-block" onclick="changeAction('out')" data-dismiss="modal" data-toggle="modal" data-target="#loginModal" style="background-color: #ffca2c;">Time Out</button>    
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-block btn-success" onclick="changeAction('in')" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Mark Attendance</button>
                                 </div>
                             </div>
                         </div>
@@ -92,38 +95,103 @@
                 </div>
             </div>
         </div>
-        
+    </body>
+    <!-- jQuery -->
+    <script src="{{ asset('app.js') }}"></script>
     <!-- jQuery -->
     <script src="{{ asset('style/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('style/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- jQuery UI -->
-    <script src="{{ asset('style/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('style/dist/js/adminlte.min.js') }}"></script>
-    <!-- Select2 -->
-    <script src="{{ asset('style/plugins/select2/js/select2.full.min.js') }}"></script>
-    <!-- Bootstrap4 Duallistbox -->
-    <script src="{{ asset('style/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
+
     <!-- Toastr -->
     <script src="{{ asset('style/plugins/toastr/toastr.min.js') }}"></script>
     <!-- SweetAlert2 -->
     <script src="{{ asset('style/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    <!-- Select2 -->
+    <script src="{{ asset('style/plugins/select2/js/select2.full.min.js') }}"></script>
+
+    <!-- ChartJS -->
+    <script src="{{ asset('style/plugins/chart.js/Chart.min.js') }}"></script>
+
     <script>
     $(function () {
-            $('.select2').select2();
-            $('.select2bs4').select2({
-            theme: 'bootstrap4'
-            })
-        });
+        $('.select2').select2();
+        trigerStudent('Students');
+    });
     </script>
     <script>
-        @if(Session::has('success1'))
+        function trigerStudent(val){
+            var userType = val;
+
+            $.ajax({
+                url: '{{ route("getUserType") }}',
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: { userType: userType },
+                success: function(response) {
+                    $('#fullName').empty();
+                    $('#fullName').empty().append('<option value=""></option>'); // Append empty option
+                    $.each(response, function(index, value) {
+                        $('#fullName').append('<option value="' + value.id + '">' + value.lname + ', ' + value.fname + ' ' + value.mname + '</option>');
+                    });
+                    $('#fullName').select2({
+                        theme: 'bootstrap4',
+                        minimumResultsForSearch: 0 // Enable search box
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+    <script>
+        function nameTrigger(val){
+
+            var usertype = document.getElementById("userType").value;
+            var user_name = document.getElementById("user-name-div");
+
+            if(val != ''){
+                $('.visitor-staff').css('display', 'none');
+            }else{
+                $('.visitor-staff').css('display', 'block');
+            }
+            if(usertype == "Staff" || usertype == "Visitor"){
+                user_name.classList.remove("col-4");
+                user_name.classList.add("col-8");
+            }
+        }
+    </script>
+    <script>
+        @if(Session::has('success'))
             Swal.fire({
-                text: '{{ session('success1') }}',
+                text: '{{ session('success') }}',
                 icon: 'success',
                 showConfirmButton: false, 
                 timer: 1500 
+            });
+        @endif
+
+        @if(Session::has('error'))
+            Swal.fire({
+                text: '{{ session('error') }}',
+                icon: 'error',
+                showConfirmButton: false, 
+                timer: 1500 
+            });
+        @endif
+
+        @if ($errors->any())
+            Swal.fire({
+                text: '{{ $errors->first() }}',
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 1500
             });
         @endif
 
@@ -169,13 +237,9 @@
                 },
                 data: { userType: userType },
                 success: function(response) {
-                    $('#fullName').empty();
+                    $('#fullName').empty().append('<option value=""></option>');
                     $.each(response, function(index, value) {
-                        $('#fullName').append('<option value="' + value.id + '">' + value.lname + ', ' + value.s_fname + ' ' + value.s_mname + '</option>');
-                    });
-                    $('#fullName').select2({
-                        theme: 'bootstrap4',
-                        minimumResultsForSearch: 0 // Enable search box
+                        $('#fullName').append('<option value="' + value.id + '">' + value.lname + ', ' + value.fname + ' ' + value.mname + '</option>');
                     });
                 },
                 error: function(xhr, status, error) {
@@ -192,9 +256,15 @@
         });
 
         function typeChange(val){
-            if(val == 'Students' || val == 'Faculty'){
+            var user_type = document.getElementById("user-type-div");
+            var user_name = document.getElementById("user-name-div");
+            if(val == 'Students' || val == 'Faculty'){ 
                 $('.student-faculty').css('display', 'block');
-                $('.visitor-staff').css('display', 'none');
+                $('.visitor-staff').css('display', 'none');          
+                user_type.classList.remove("col-4");
+                user_type.classList.add("col-6");
+                user_name.classList.remove("col-4");
+                user_name.classList.add("col-6");
             }else{
                 $('.student-faculty').css('display', 'none');
                 $('.visitor-staff').css('display', 'block');
@@ -206,6 +276,13 @@
                     $('.office').css('display', 'none');
                     $('.campus').css('display', 'block');
                 }
+                user_type.classList.remove("col-6");
+                user_type.classList.add("col-4");
+                user_name.classList.remove("col-6");
+                user_name.classList.add("col-4");
+
+                user_name.classList.remove("col-8");
+                user_name.classList.add("col-4");
             }
         } 
     </script>
@@ -215,5 +292,4 @@
             $('#action').val(action);
         }
     </script>
-</body>
 </html>
