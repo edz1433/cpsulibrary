@@ -17,7 +17,7 @@
                                 <option value="Students" selected>Student</option>
                                 <option>Faculty</option>
                                 <option>Staff</option>
-                                <option>Visitor</option>
+                                <option>Guest</option>
                             </select>
                         </div>
                         <div class="col-6" id="user-name-div">

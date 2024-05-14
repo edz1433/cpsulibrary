@@ -37,6 +37,7 @@ use App\Http\Controllers\ReportsController;
 
         Route::prefix('/monitoring')->group(function () {
             Route::get('/list', [MonitoringController::class,'monitorRead'])->name('monitorRead');
+            Route::post('/list', [MonitoringController::class,'monitorReadPost'])->name('monitorReadPost');
         });
 
         Route::prefix('/reports')->group(function () {

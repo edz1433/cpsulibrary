@@ -161,7 +161,7 @@
             }else{
                 $('.visitor-staff').css('display', 'block');
             }
-            if(usertype == "Staff" || usertype == "Visitor"){
+            if(usertype == "Staff" || usertype == "Guest"){
                 user_name.classList.remove("col-4");
                 user_name.classList.add("col-8");
             }
@@ -272,7 +272,7 @@
                     $('.office').css('display', 'block');
                     $('.campus').css('display', 'none');
                 }
-                if(val == 'Visitor'){
+                if(val == 'Guest'){
                     $('.office').css('display', 'none');
                     $('.campus').css('display', 'block');
                 }

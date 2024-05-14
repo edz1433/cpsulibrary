@@ -19,6 +19,42 @@ class MonitoringController extends Controller
         return view('monitoring.mon-list', compact('monitorings'));  
     }   
 
+    public function monitorReadPost(Request $request){
+        $date1 = $request->date1;
+        $date2 = $request->date2;
+            
+        $monitorings = Monitoring::join('lib_visits', 'monitorings.s_id', '=', 'lib_visits.id')
+        ->leftJoin('offices', 'offices.id', '=', 'lib_visits.office')
+        ->leftJoin('campuses', 'campuses.id', '=', 'lib_visits.campus')
+        ->select('lib_visits.*', 'monitorings.date', 'monitorings.time_in', 'monitorings.time_out', \DB::raw('COALESCE(offices.office_name, "No Office") as office_name'), \DB::raw('COALESCE(campuses.campus_name, "No Campus") as campus_name'))
+        ->where('monitorings.date', '>=', $date1)
+        ->where('monitorings.date', '<=', $date2);
+
+        $countmon = Monitoring::rightJoin('lib_visits', 'monitorings.s_id', '=', 'lib_visits.id')
+        ->leftJoin('offices', 'offices.id', '=', 'lib_visits.office')
+        ->select(\DB::raw('COALESCE(lib_visits.course, "No Course") as course'), 'lib_visits.user_type', \DB::raw('COUNT(monitorings.id) as count'))
+        ->where('monitorings.date', '>=', $date1)
+        ->where('monitorings.date', '<=', $date2)
+        ->groupBy('course', 'lib_visits.user_type');
+    
+        if ($date1 === $date2) {
+            $monitorings->whereDate('monitorings.date', '=', $date1);
+            $countmon->whereDate('monitorings.date', '=', $date1);
+        } else {
+            $monitorings->whereDate('monitorings.date', '>=', $date1)
+                        ->whereDate('monitorings.date', '<=', $date2);
+
+            $countmon->whereDate('monitorings.date', '>=', $date1)
+                        ->whereDate('monitorings.date', '<=', $date2);
+        }
+    
+        $monitorings = $monitorings->get();
+
+        $countmon = $countmon->get();
+    
+        return view('monitoring.mon-list', compact('monitorings', 'date1', 'date2', 'countmon'));  
+    }       
+
     public function getUserType(Request $request)
     {
         $userType = $request->input('userType');
@@ -80,18 +116,18 @@ class MonitoringController extends Controller
                 'visit_id' => 'Name',
             ]);
         }
-        if($utype == "Staff" || $utype == "Visitor"){
+        if($utype == "Staff" || $utype == "Guest"){
             if(empty($visit_id)){
                 $validator = Validator::make($request->all(), [
                     'lname' => 'required',
                     'fname' => 'required',
-                    ($utype == "Staff") ? 'office' : 'campus' => 'required',
+                    ($utype == "Staff") ? 'office' : 'campus' => ($utype == "Staff") ? 'required' : 'nullable',
                 ]);
 
                 $validator->setAttributeNames([
                     'lname' => 'Last Name',
                     'fname' => 'First Name',
-                    ($utype == "Staff" ? 'office' : 'campus') => ($utype == "Staff" ? 'Office Name' : 'Campus Name'),
+                    ($utype == "Staff" ? 'office' : '') => ($utype == "Staff" ? 'Office Name' : ''),
                 ]);                
             }
         }
@@ -113,7 +149,7 @@ class MonitoringController extends Controller
                 $incompleteRecord->time_out = $currentTime;
                 $incompleteRecord->status = 'completed';
                 $incompleteRecord->save();
-                return redirect()->back()->with('success','Time-in');
+                return redirect()->back()->with('success','Time-out');
             } else {
                 Monitoring::create([
                     's_id' => $visit_id,
@@ -121,10 +157,10 @@ class MonitoringController extends Controller
                     'time_in' => $currentTime,
                     'status' => 'incomplete'
                 ]);
-                return redirect()->back()->with('success','Time-out');
+                return redirect()->back()->with('success','Time-in');
             }
         }
-        elseif($utype == 'Staff' || $utype == 'Visitor'){
+        elseif($utype == 'Staff' || $utype == 'Guest'){
             if($visit_id != ""){
 
                 $incompleteRecord = Monitoring::where('s_id', $visit_id)
